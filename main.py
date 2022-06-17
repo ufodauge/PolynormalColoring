@@ -13,14 +13,16 @@ from classes.graph import Graph
 #   \ /
 #   v5
 
-graph = Graph({
-    "e1": ["v1", "v2"],
-    "e2": ["v1", "v3"],
-    "e3": ["v2", "v3"],
-    "e4": ["v2", "v4"],
-    "e5": ["v3", "v4"],
-    "e6": ["v3", "v5"],
-    "e7": ["v4", "v5"],
-})
+graph = Graph(
+    # verticies
+    ["v1", "v2", "v3", "v4", "v5"],
+    # edges
+    [["v1", "v2"],
+     ["v1", "v3"],
+     ["v2", "v3"],
+     ["v2", "v4"],
+     ["v3", "v4"],
+     ["v3", "v5"],
+     ["v4", "v5"]])
 
 print(calcPolynormalColoring(graph))
