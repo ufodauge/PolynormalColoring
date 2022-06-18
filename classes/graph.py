@@ -6,12 +6,13 @@ class Graph:
     """
     グラフを表現するクラス
     """
+
     def __init__(self, verticies: list, edges: list[str, str]) -> None:
         self.verticies = deepcopy(verticies)
         self.edges = deepcopy(edges)
 
     def __str__(self) -> str:
-        return "Graph(verticies={},\n      edges    ={})"\
+        return "Graph(verticies={}, edges={})"\
             .format(self.verticies, self.edges)
 
     def remove(self, edge: list[str, str]) -> list[str, str]:
@@ -43,10 +44,11 @@ class Graph:
                 edge[1] = v1
 
         # remove duplicated edges
-        for e1 in newEdges:
-            for e2 in newEdges[newEdges.index(e1) + 1:]:
+        for e1, i in zip(newEdges, range(len(newEdges))):
+            for e2 in newEdges[i + 1:]:
                 if e1[0] == e2[0] and e1[1] == e2[1]:
-                    newEdges.remove(e2)
+                    newEdges[i] = None
+                    newEdges.remove(None)
 
         return Graph(newVerticies, newEdges)
 
