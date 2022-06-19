@@ -1,4 +1,4 @@
-from calculator import calcPolynormalColoring, calcPolynormalColoringOptimized
+from calculator import calcPolynormalColoring, calcPolynormalColoring2
 from classes.graph import Graph
 
 # グラフの構成
@@ -25,5 +25,5 @@ graph = Graph(
      ["v3", "v5"],
      ["v4", "v5"]])
 
-print(calcPolynormalColoringOptimized(graph))
+# print(calcPolynormalColoring2(graph))
 print(calcPolynormalColoring(graph))

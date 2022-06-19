@@ -2,8 +2,7 @@ import sympy as sp
 from classes.graph import Graph
 
 
-
-def calcPolynormalColoringOptimized(graph: Graph) -> sp.core.expr.Expr:
+def calcPolynormalColoring2(graph: Graph) -> sp.core.expr.Expr:
     n: sp.core.symbol.Symbol = sp.symbols("n")
     stack: list[tuple[Graph, int]] = [(graph, sp.Integer(1))]
     expr: sp.core.expr.Expr = sp.Integer(0)
@@ -27,7 +26,6 @@ def calcPolynormalColoringOptimized(graph: Graph) -> sp.core.expr.Expr:
             expr += n**verticiesCount * sign
 
     return expr
-
 
 
 def calcPolynormalColoring(graph: Graph) -> sp.core.expr.Expr:

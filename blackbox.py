@@ -1,7 +1,7 @@
 import time
 
 from tqdm import tqdm
-from calculator import calcPolynormalColoring, calcPolynormalColoringOptimized
+from calculator import calcPolynormalColoring, calcPolynormalColoring2
 from classes.graph import Graph
 import random
 
@@ -31,7 +31,7 @@ def blackboxTest():
             time_nonopt = 0
             for j in tqdm(range(100)):
                 start = time.time()
-                results.append(calcPolynormalColoringOptimized(graph))
+                results.append(calcPolynormalColoring2(graph))
                 time_opt += time.time() - start
 
                 start = time.time()
