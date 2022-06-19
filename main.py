@@ -1,4 +1,4 @@
-from calculator import calcPolynormalColoring, calcPolynormalColoring2
+from calculator import calcPolynormalColoring
 from classes.graph import Graph
 
 # グラフの構成
