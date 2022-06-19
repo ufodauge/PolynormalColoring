@@ -2,6 +2,45 @@ import sympy as sp
 from classes.graph import Graph
 
 
+class ProgressData:
+    def __init__(self, depth: int):
+        self.depthProgress = []
+
+    def update(self, depth: int):
+        self.depthProgress[depth] += 1
+
+    def print(self):
+        # print all progress data
+        for i in range(len(self.depthProgress)):
+            print("depth {}: {}".format(i, self.depthProgress[i]))
+
+        print("\033[{}F".format(len(self.depthProgress) + 1))
+
+
+def calcPolynormalColoring(
+        graph: Graph,
+        depth: int = 0,
+        pd: ProgressData = ProgressData(0)) -> sp.core.expr.Expr:
+    n: sp.core.symbol.Symbol = sp.symbols("n")
+    pd.update(depth)
+    pd.print()
+
+    if graph.hasEdge():
+        edge: list[str, str] = graph.getRandomEdge()
+
+        # get a new edge-removed graph (copy)
+        shortCircuited = graph.shortCircuit(edge)
+        # get a new edge-contracted graph (copy)
+        contracted = graph.contract(edge)
+
+        return calcPolynormalColoring(shortCircuited, depth + 1, pd) + \
+            - calcPolynormalColoring(contracted, depth + 1, pd)
+
+    else:
+        verticiesCount = graph.getVerticiesCount()
+        return n**verticiesCount
+
+
 def calcPolynormalColoring2(graph: Graph) -> sp.core.expr.Expr:
     n: sp.core.symbol.Symbol = sp.symbols("n")
     stack: list[tuple[Graph, int]] = [(graph, sp.Integer(1))]
@@ -26,21 +65,3 @@ def calcPolynormalColoring2(graph: Graph) -> sp.core.expr.Expr:
             expr += n**verticiesCount * sign
 
     return expr
-
-
-def calcPolynormalColoring(graph: Graph) -> sp.core.expr.Expr:
-    n: sp.core.symbol.Symbol = sp.symbols("n")
-    if graph.hasEdge():
-        edge: list[str, str] = graph.getRandomEdge()
-
-        # get a new edge-removed graph (copy)
-        shortCircuited = graph.shortCircuit(edge)
-        # get a new edge-contracted graph (copy)
-        contracted = graph.contract(edge)
-
-        return calcPolynormalColoring(shortCircuited) \
-            - calcPolynormalColoring(contracted)
-
-    else:
-        verticiesCount = graph.getVerticiesCount()
-        return n**verticiesCount

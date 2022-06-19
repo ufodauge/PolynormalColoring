@@ -92,6 +92,9 @@ class Graph:
     def getRandomEdge(self) -> list:
         return choice(self.edges)
 
+    def getFirstEdge(self) -> list:
+        return self.edges[0]
+
 
 if __name__ == "__main__":
     graph1 = Graph(
