@@ -7,12 +7,14 @@ class ProgressData:
         self.depthProgress = []
 
     def update(self, depth: int):
+        if len(self.depthProgress) <= depth:
+            self.depthProgress.append(0)
         self.depthProgress[depth] += 1
 
     def print(self):
         # print all progress data
         for i in range(len(self.depthProgress)):
-            print("depth {}: {}".format(i, self.depthProgress[i]))
+            print("depth {}: {}          ".format(i, self.depthProgress[i]))
 
         print("\033[{}F".format(len(self.depthProgress) + 1))
 
