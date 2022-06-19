@@ -7,9 +7,26 @@ class Graph:
     グラフを表現するクラス
     """
 
-    def __init__(self, verticies: list, edges: list[str, str]) -> None:
+    def __init__(self, verticies: list[str],
+                 edges: list[list[str, str]]) -> None:
         self.verticies = deepcopy(verticies)
         self.edges = deepcopy(edges)
+
+        # remove duplicate edges
+        for i in range(len(self.edges)):
+            try:
+                for j in range(i + 1, len(self.edges)):
+                    if set(self.edges[i]) == set(self.edges[j]):
+                        self.edges[j] = None
+
+                self.edges = [e for e in self.edges if e is not None]
+            except IndexError:
+                pass
+
+        # remove self-loop
+        for e in self.edges:
+            if e[0] == e[1]:
+                self.edges.remove(e)
 
     def __str__(self) -> str:
         return "Graph(verticies={}, edges={})"\
@@ -22,11 +39,13 @@ class Graph:
         return newEdges
 
     def shortCircuit(self, edge: list[str, str]):
+        edge = deepcopy(edge)
         newEdges: list[str, str] = self.remove(edge)
 
         return Graph(self.verticies, newEdges)
 
     def contract(self, edge: list[str, str]):
+        edge = deepcopy(edge)
         v1: str = edge[0]
         v2: str = edge[1]
 
@@ -34,7 +53,10 @@ class Graph:
         newEdges: list[str, str] = self.remove(edge)
         # v2 を削除
         newVerticies: list[str] = deepcopy(self.verticies)
-        newVerticies.remove(v2)
+        if v2 in newVerticies:
+            newVerticies.remove(v2)
+        else:
+            newVerticies.remove(v1)
 
         # v2 に接続されている辺を全て v1 に接続する
         for edge in newEdges:
@@ -43,12 +65,21 @@ class Graph:
             if edge[1] == v2:
                 edge[1] = v1
 
-        # remove duplicated edges
-        for e1, i in zip(newEdges, range(len(newEdges))):
-            for e2 in newEdges[i + 1:]:
-                if e1[0] == e2[0] and e1[1] == e2[1]:
-                    newEdges[i] = None
-                    newEdges.remove(None)
+        # remove duplicate edges
+        for i in range(len(newEdges)):
+            try:
+                for j in range(i + 1, len(newEdges)):
+                    if set(newEdges[i]) == set(newEdges[j]):
+                        newEdges[j] = None
+
+                newEdges = [e for e in newEdges if e is not None]
+            except IndexError:
+                pass
+
+        # remove self-loop
+        for e in newEdges:
+            if e[0] == e[1]:
+                newEdges.remove(e)
 
         return Graph(newVerticies, newEdges)
 
@@ -65,26 +96,14 @@ class Graph:
 if __name__ == "__main__":
     graph1 = Graph(
         # verticies
-        ["v1", "v2", "v3", "v4", "v5"],
+        ['v1', 'v2', 'v3'],
         # edges
-        [["v1", "v2"],
-         ["v1", "v3"],
-         ["v2", "v3"],
-         ["v2", "v4"],
-         ["v3", "v4"],
-         ["v3", "v5"],
-         ["v4", "v5"]])
+        [['v1', 'v2'], ['v1', 'v2'], ['v3', 'v1'], ['v2', 'v3']])
     graph2 = Graph(
         # verticies
-        ["v1", "v2", "v3", "v4", "v5"],
+        ['v1', 'v2', 'v3'],
         # edges
-        [["v1", "v2"],
-         ["v1", "v3"],
-         ["v2", "v3"],
-         ["v2", "v4"],
-         ["v3", "v4"],
-         ["v3", "v5"],
-         ["v4", "v5"]])
+        [['v1', 'v2'], ['v3', 'v1'], ['v2', 'v3'], ['v1', 'v2']])
 
     print(graph1)
     print(graph2)
